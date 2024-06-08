@@ -1,0 +1,48 @@
+[
+    {
+      "id": 1,
+      "task": "Finish project proposal",
+      "draft": false,
+      "completed": false,
+      "category": "Work",
+      "sentToTrash": false,
+      "updatedDate": "2024-06-09T10:00:00Z"
+    },
+    {
+      "id": 2,
+      "task": "Buy groceries",
+      "draft": false,
+      "completed": true,
+      "category": "Personal",
+      "sentToTrash": false,
+      "updatedDate": "2024-06-08T15:30:00Z"
+    },
+    {
+      "id": 3,
+      "task": "Call mom",
+      "draft": true,
+      "completed": false,
+      "category": "Personal",
+      "sentToTrash": false,
+      "updatedDate": "2024-06-09T08:45:00Z"
+    },
+    {
+      "id": 4,
+      "task": "Read book",
+      "draft": false,
+      "completed": false,
+      "category": "Personal",
+      "sentToTrash": true,
+      "updatedDate": "2024-06-07T12:20:00Z"
+    },
+    {
+      "id": 5,
+      "task": "Go for a run",
+      "draft": false,
+      "completed": true,
+      "category": "Health",
+      "sentToTrash": true,
+      "updatedDate": "2024-06-09T09:00:00Z"
+    }
+  ]
+  

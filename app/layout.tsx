@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} w-full h-auto transition ease-in-out delay-150 duration-500`} suppressHydrationWarning={true}>
         <Navbar/>
         {children}
         </body>
