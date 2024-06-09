@@ -1,10 +1,13 @@
 import Searchbar from "@/components/searchbar/searchbar";
+import Image from "next/image";
 
 const Navbar = ()=>{
     return (
-        <div className="w-full mx-auto py-5 bg-zinc-200">
+        <div className="w-full mx-auto py-5 bg-zinc-200 flex flex-row items-center px-20 gap-5">
             <Searchbar/>
-            
+            <div className="w-10 h-10">
+                <Image src="https://lh3.googleusercontent.com/a/ACg8ocLmrCVxk2jcxskTY1eM_zhkzh8CX1YEVWJWH0hktyacMry0Qo92=s96-c-rg-br100" width={500} height={500} alt="..." className="w-full h-full"/>
+            </div>
         </div>
     )
 }

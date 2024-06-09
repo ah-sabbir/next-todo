@@ -1,6 +1,6 @@
 const Searchbar = ()=>{
     return (
-        <div className="w-full mx-auto px-10 flex items-center justify-center">
+        // <div className="w-full mx-auto px-10 flex items-center justify-center">
                 <div className="bg-zinc-300 border border-transparent focus-within:border-0  flex px-6 rounded-full h-10 md:w-2/4 mx-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.904 192.904" width="16px"
                         className="fill-gray-600 mr-3 rotate-90">
@@ -10,10 +10,10 @@ const Searchbar = ()=>{
                     </svg>
                     <input type='email' placeholder='Search...'
                         className="w-full box-border text-zinc-500 h-full bg-transparent text-2xl leading-5 font-normal outline-none outline-offset-2 m-0 pr-6 p-0 border-0 border-solid focus:outline-offset-none" />
-                    </div>
-            {/* search-bar  */}
-            {/* <Searchbar/> */}
-        </div>
+                </div>
+        //    {/* search-bar  */}
+         //   {/* <Searchbar/> */}
+        // </div>
     )
 }
 
