@@ -1,0 +1,42 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Create Users Table
+CREATE TABLE Users (
+    user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Todos Table
+CREATE TABLE Todos (
+    todo_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(10) DEFAULT 'active',
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Create Notifications Table
+CREATE TABLE Notifications (
+    notification_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    todo_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    type VARCHAR(10),
+    email VARCHAR(100) NOT NULL,
+    sent_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (todo_id) REFERENCES Todos(todo_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Create Trash Table
+CREATE TABLE Trash (
+    trash_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    todo_id UUID NOT NULL,
+    trashed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (todo_id) REFERENCES Todos(todo_id)
+);

@@ -1,0 +1,37 @@
+mutation InsertUser($username: String) {
+  insert_users_one(object: {username: $username, email: "b@gmail.com", password_hash: "$2y$10$OtHW2Grm17doa4HdP5SHkuZfgWEOdbpcKLm6TQzMFGm6fh7XZ4ojS"}) {
+    user_id
+    email
+    username
+    updated_at
+  }
+}
+
+mutation InsertTask {
+  insert_todos_one(object: {title: "this is 1st", description: "lorem ipsum", status: "active", user_id: "da7170da-d240-4f40-89bf-71eeab2a39b3"}) {
+    todo_id
+    title
+    description
+    status
+    user_id
+    updated_at
+  }
+}
+
+query tasks {
+  todos(order_by: {created_at: asc, status: asc}) {
+    title
+    description
+    status
+    todo_id
+    user_id
+    updated_at
+    created_at
+  }
+}
+
+mutation DeleteTask {
+  delete_todos(where: {_and: {user_id: {_eq: ""}, todo_id: {_eq: ""}}}) {
+    affected_rows
+  }
+}
