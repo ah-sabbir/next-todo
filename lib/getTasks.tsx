@@ -12,7 +12,7 @@ interface parseInterface {
 
 const getTasks = () => {
     // const response:parseInterface = JSON.parse(open('./sampleData.json'))
-    return response || null;
+    return "response" || null;
 }
 
 export default getTasks
