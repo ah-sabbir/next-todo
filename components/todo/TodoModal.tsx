@@ -8,7 +8,7 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 
 
 const query = gql`
-mutation insert_todos_one($object: todos_insert_input!) {
+mutation InsertTask($object: todos_insert_input!) {
   insert_todos_one(object: $object) {
     created_at
     description
@@ -24,22 +24,28 @@ mutation insert_todos_one($object: todos_insert_input!) {
 //"bd2b1838-9145-498f-9bec-42e8e77810b6"
 
 
-const TodoModal = () => {
+const TodoModal = (show:Boolean) => {
 
     const [title, setTitle] = React.useState('');
     const [content, setContent] = React.useState('');
   
-    const [insert_todos_one, { loading, error }] = useMutation(query);
+    const [InsertTask, { loading, error }] = useMutation(query, {
+      context: {
+        headers: {
+          'x-hasura-admin-secret': `PqqUqNUH7gsH5aKf746EvtKTZzB7jKwXckzLy0L7cDGuE44AXSlxN1qZ8h3pfpfI`,
+        },
+      },
+    });
   
     const handleSubmit =  (e:any) => {
       e.preventDefault();
-      insert_todos_one({ variables: { object:{ title: "my title", description: "my description", status: "active", user_id: "bd2b1838-9145-498f-9bec-42e8e77810b6" } } }) //
+      InsertTask({ variables: { object:{ title: title, description: content, status: "active", user_id: "bd2b1838-9145-498f-9bec-42e8e77810b6" } } }) //
         .then((response) => {
           console.log(response.data);
           // Handle successful mutation
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error.message);
           // Handle error
         });
     };
