@@ -40,3 +40,35 @@ CREATE TABLE Trash (
     trashed_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (todo_id) REFERENCES Todos(todo_id)
 );
+
+
+
+
+      <ol className="w-full">
+      {
+        jsondata && jsondata.map((data,i)=>(
+          <li key={i} className="py-2">
+            <div className={`w-full flex flex-row items-center justify-between p-4 border-2 border-zinc-200 rounded-md drop-shadow-xl`}>
+                <div>
+                    <div className="flex items-center justify-between">
+                        <span className="sr-only">User info</span>
+                        <h3 className="font-medium">{data.id}. {data.task}</h3>
+                    </div>
+                    <div className="date flex gap-1 text-[14px] text-zinc-500 pt-2 items-center">
+                      <svg className="w-6 h-6 text-zinc-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
+                      </svg>
+                      {getDate()}
+                  </div>
+                </div>
+                {
+                  select && <input type="checkbox" id={data.task} name="vehicle1" value={data.task} onChange={CheckBoxChangeHandler} onClick={()=>setCounter(counter+1)}/>
+                }
+                {
+                  !select && <button>delete</button>
+                }
+            </div>
+          </li>
+        ))
+      }
+      </ol>

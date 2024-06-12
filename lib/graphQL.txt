@@ -1,5 +1,5 @@
-mutation InsertUser($username: String) {
-  insert_users_one(object: {username: $username, email: "b@gmail.com", password_hash: "$2y$10$OtHW2Grm17doa4HdP5SHkuZfgWEOdbpcKLm6TQzMFGm6fh7XZ4ojS"}) {
+mutation InsertUser($username: String!, $email: String!, $password: String!) {
+  insert_users_one(object: {username: $username, email: $email, password_hash: $password}) {
     user_id
     email
     username
@@ -7,8 +7,16 @@ mutation InsertUser($username: String) {
   }
 }
 
+query GetUsers {
+  users {
+    user_id
+    username
+    email
+  }
+}
+
 mutation InsertTask {
-  insert_todos_one(object: {title: "this is 1st", description: "lorem ipsum", status: "active", user_id: "da7170da-d240-4f40-89bf-71eeab2a39b3"}) {
+  insert_todos_one(object: {title: "this is 3rd task", description: "lorem ipsum", status: "active", user_id: "c171bcc4-e9c6-46a7-a897-5aea322caaa7"}) {
     todo_id
     title
     description
@@ -19,7 +27,7 @@ mutation InsertTask {
 }
 
 query tasks {
-  todos(order_by: {created_at: asc, status: asc}) {
+  todos(order_by: {created_at: asc}) {
     title
     description
     status
@@ -30,8 +38,11 @@ query tasks {
   }
 }
 
-mutation DeleteTask {
-  delete_todos(where: {_and: {user_id: {_eq: ""}, todo_id: {_eq: ""}}}) {
+mutation DeleteTask ($todo_id: uuid!, $user_id: uuid!){
+  delete_todos(where: {_and: {user_id: {_eq: $user_id}, todo_id: {_eq: $todo_id}}}) {
     affected_rows
+    returning{
+      status
+    }
   }
 }

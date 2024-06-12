@@ -1,98 +1,109 @@
 'use client'
-import getTasks from "@/lib/getTasks";
+
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { ApolloClient, useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+import Todo from "@/components/todo/Todo";
+// import GET_TODOS from "@/GraphQL/queries/queries";
+import { useAuthQuery } from "@nhost/react-apollo";
+import { nhost } from "@/lib/nhost";
+import { NhostProvider } from "@nhost/nextjs";
 
-import jsondata from '@/lib/sampleData.json';
+import {
+  useAuthenticated,
+  useSignInEmailPassword,
+  useSignOut,
+} from "@nhost/nextjs";
+import { graphqlClient } from "@/lib/gqlClient";
 
 
-interface parseInterface {
-  id: Number,
-  task: String,
-  draft: Boolean,
-  completed: Boolean,
-  category: String,
-  sentToTrash: Boolean,
-  updatedDate: Date
+const GET_TODOS = gql`
+query GetTodos {
+  todos(where: {user_id: {_eq: "bd2b1838-9145-498f-9bec-42e8e77810b6"}}) {
+    title
+    todo_id
+    user_id
+    updated_at
+    description
+  }
+}
+`
+
+function App() {
+  return (
+    <NhostProvider nhost={nhost}>
+      <Home />
+    </NhostProvider>
+  );
 }
 
 
 
+// async function get_todos(){
+
+//   const {data, error} = await useQuery(GET_TODOS)
+//   // const { data } = await client.query({
+//   //   query: GET_TODOS,
+//   // })
+//   console.log(data)
+//   return data;
+// }
+
+
+// const Client = new ApolloClient({
+//   url: ""
+// })
+
+
 export default function Home() {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState();
 
-  const [isSelected, setIsSelected] = useState(false);
-  const [select, setSelect] = useState(false);
-  const [counter, setCounter] = useState(Number);
-  const [resdata, setResData] = useState([])
-
-  function getDate() {
-    const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const date = today.getDate();
-    return `${month}/${date}/${year}`;
-  }
-
-  const CheckBoxChangeHandler = (e:React.ChangeEvent<HTMLInputElement>)=>{
-    if( e.target.checked ){
-      setCounter(counter + 1)
-      setIsSelected(!isSelected)
-    }else{
-      setCounter(counter - 1)
-      setIsSelected(!isSelected)
-    }
+  useEffect(()=>{
+    async function fetchTodo() {
+      setLoading(true);
+    // const { data, error } = await nhost.graphql.request(GET_TODOS);
+    const data = await fetch(process.env.NEXT_PUBLIC_HASURA_URL as string, {
+      method: 'post',
+      headers: {
+        'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET as string
+      },
+      body: JSON.stringify(GET_TODOS)
+    }).then(d=> console.log(d))
     
+    // graphqlClient.request(GET_TODOS)
+    
+    console.log(data)
+    // setData(data);
+    setLoading(false);
   }
 
+  fetchTodo();
+  },[])
 
   return (
     <main className="w-full min-h-screen flex flex-col items-center gap-3 px-5 my-auto md:px-20 md:my-10">
       <h3 className="text-left w-full text-[24px] font-semibold leading-[20px]none border-b-2 border-zinc-100 py-5 my-10">MY To-Do</h3>
-      <div className="w-full flex gap-5">
-        <button className="bg-[#3B40D5] text-zinc-100 px-5 py-3 rounded-md">+ New Task</button>
-        <div className="filter-btn flex items-center gap-3 justify-center border-2 rounded-md px-6 cursor-pointer">
+      <div className="w-full flex flex-col md:flex-row gap-2 md:gap-5">
+        <button className="bg-[#3B40D5] text-zinc-100 text-[14px] px-3 py-2 md:px-5 md:py-3 rounded-md">+ New Task</button>
+        {/* <TodoModal /> */}
+        <div className="filter-btn flex items-center gap-3 justify-center border-2 rounded-md px-6 py-2 cursor-pointer">
           <svg className="w-4 h-4 text-zinc-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" strokeLinecap="round" strokeWidth="2" d="M18.796 4H5.204a1 1 0 0 0-.753 1.659l5.302 6.058a1 1 0 0 1 .247.659v4.874a.5.5 0 0 0 .2.4l3 2.25a.5.5 0 0 0 .8-.4v-7.124a1 1 0 0 1 .247-.659l5.302-6.059c.566-.646.106-1.658-.753-1.658Z"/>
           </svg>
           <span>Filter</span>
         </div>
-        <button className="bg-[#3B40D5] text-zinc-100 px-5 py-3 rounded-md capitalize" onClick={()=>setSelect(!select)}>{counter || ""} select multiple</button>
+        <button className="bg-[#3B40D5] text-zinc-100 text-[14px] px-3 py-2 md:px-5 md:py-3 rounded-md" > select multiple</button>
       </div>
-      <ol className="w-full">
-      {
-        jsondata && jsondata.map((data,i)=>(
-          <li key={i} className="py-2">
-            <div className={`w-full flex flex-row items-center justify-between p-4 ${isSelected && 'text-green-700 border border-green-300 rounded-lg bg-green-50'} border-2 border-zinc-200 rounded-md drop-shadow-xl`}>
-                <div>
-                    <div className="flex items-center justify-between">
-                        <span className="sr-only">User info</span>
-                        <h3 className="font-medium">{data.id}. {data.task}</h3>
-                        {
-                          isSelected && (
-                            <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 12">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5.917 5.724 10.5 15 1.5"/>
-                            </svg>
-                          )
-                        }
-                    </div>
-                    <div className="date flex gap-1 text-[14px] text-zinc-500 pt-2 items-center">
-                      <svg className="w-6 h-6 text-zinc-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 10h16M8 14h8m-4-7V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Z"/>
-                      </svg>
-                      {getDate()}
-                  </div>
-                </div>
-                {
-                  select && <input type="checkbox" id={data.task} name="vehicle1" value={data.task} onChange={CheckBoxChangeHandler} onClick={()=>setCounter(counter+1)}/>
-                }
-                {
-                  !select && <button>delete</button>
-                }
-            </div>
-          </li>
-        ))
-      }
-      </ol>
+        <div className="w-full">
+          {
+            data ? (
+              <Todo title="this is title" description="lorem ipsum lorem ipsum"/>
+            ):(
+              <h2>No Todo</h2>
+            )
+          }
+        </div>
     </main>
   );
 }
