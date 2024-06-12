@@ -1,11 +1,14 @@
 import { HttpLink, InMemoryCache, ApolloClient } from "@apollo/client";
-import { registerApolloClient } from "@apollo/experimental-nextjs-app-support/rsc";
 
-export const { getClient } = registerApolloClient(() => {
-  return new ApolloClient({
+export const Client =  new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({
-      uri: "https://main--time-pav6zq.apollographos.net/graphql",
+      uri: "https://oriented-hare-89.hasura.app/v1/graphql",
     }),
   });
-});
+
+
+// const client = new ApolloClient({
+//   uri: 'https://oriented-hare-89.hasura.app/v1/graphql',
+//   cache: new InMemoryCache(),
+// });

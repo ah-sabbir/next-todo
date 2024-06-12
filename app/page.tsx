@@ -2,18 +2,24 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ApolloClient, useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
+//import { ApolloClient, useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
 import Todo from "@/components/todo/Todo";
 // import GET_TODOS from "@/GraphQL/queries/queries";
 import { useAuthQuery } from "@nhost/react-apollo";
 import { nhost } from "@/lib/nhost";
 import { NhostProvider } from "@nhost/nextjs";
 
+import { gql, useQuery } from "@apollo/client";
+import { Client } from "@/lib/client";
+import { cookies } from "next/headers";
+
+
 import {
   useAuthenticated,
   useSignInEmailPassword,
   useSignOut,
 } from "@nhost/nextjs";
+
 import { graphqlClient } from "@/lib/gqlClient";
 
 
@@ -56,30 +62,48 @@ function App() {
 
 
 export default function Home() {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState();
+  // const [loading, setLoading] = useState(true);
+  // const [todo, setTodo] = useState();
 
-  useEffect(()=>{
-    async function fetchTodo() {
-      setLoading(true);
-    // const { data, error } = await nhost.graphql.request(GET_TODOS);
-    const data = await fetch(process.env.NEXT_PUBLIC_HASURA_URL as string, {
-      method: 'post',
+  const { data, loading } = useQuery(GET_TODOS, {
+    context: {
       headers: {
-        'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET as string
+        'x-hasura-admin-secret': `PqqUqNUH7gsH5aKf746EvtKTZzB7jKwXckzLy0L7cDGuE44AXSlxN1qZ8h3pfpfI`,
       },
-      body: JSON.stringify(GET_TODOS)
-    }).then(d=> console.log(d))
-    
-    // graphqlClient.request(GET_TODOS)
-    
-    console.log(data)
-    // setData(data);
-    setLoading(false);
+    },
+  });
+
+  if (loading) {
+    return <div>loading.....</div>;
   }
 
-  fetchTodo();
-  },[])
+
+    // setTodo(data?.todos)
+    console.log(data.todos);
+
+
+
+  // useEffect(()=>{
+  //   async function fetchTodo() {
+  //     setLoading(true);
+  //   // const { data, error } = await nhost.graphql.request(GET_TODOS);
+  //   const data = await fetch(process.env.NEXT_PUBLIC_HASURA_URL as string, {
+  //     method: 'post',
+  //     headers: {
+  //       'x-hasura-admin-secret': process.env.NEXT_PUBLIC_HASURA_ADMIN_SECRET as string
+  //     },
+  //     body: JSON.stringify(GET_TODOS)
+  //   }).then(d=> console.log(d))
+    
+  //   // graphqlClient.request(GET_TODOS)
+    
+  //   console.log(data)
+  //   // setData(data);
+  //   setLoading(false);
+  // }
+
+  // fetchTodo();
+  // },[])
 
   return (
     <main className="w-full min-h-screen flex flex-col items-center gap-3 px-5 my-auto md:px-20 md:my-10">
@@ -95,11 +119,11 @@ export default function Home() {
         </div>
         <button className="bg-[#3B40D5] text-zinc-100 text-[14px] px-3 py-2 md:px-5 md:py-3 rounded-md" > select multiple</button>
       </div>
-        <div className="w-full">
+        <div className="w-full flex flex-nowrap">
           {
-            data ? (
-              <Todo title="this is title" description="lorem ipsum lorem ipsum"/>
-            ):(
+            data.todos && data.todos.map((todo:any, i:any)=>(
+              <Todo key={i} data = {todo} title="this is title" description="lorem ipsum lorem ipsum"/>
+            ))|| (
               <h2>No Todo</h2>
             )
           }
