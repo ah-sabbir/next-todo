@@ -1,19 +1,42 @@
 import { useQuery, gql, useMutation } from "@apollo/client";
 
 
-const GET_TODOS = gql`
-query tasks {
-  todos(order_by: {created_at: asc}) {
+// class Todos{
+//   user_id: string;
+  
+//   constructor(user_id){
+//     this.user_id = user_id;
+//   }
+// }
+
+
+export const GET_TODOS = (user_id:string)=>{
+  return gql`
+query GetTodos{
+  todos(where: {user_id: {_eq: "${user_id}"}}) {
     title
-    description
-    status
     todo_id
     user_id
     updated_at
-    created_at
+    description
   }
 }
-`;
+`;}
+
+export const INSERT_TODOS = ()=>gql`
+mutation {
+  insert_todos_one(object: {title: "this is 3rd task", description: "lorem ipsum", status: "active", user_id: "bd2b1838-9145-498f-9bec-42e8e77810b6"}) {
+    todo_id
+    title
+    description
+    status
+    user_id
+    updated_at
+  }`
+
+
+
+
 
 export default {
     GET_TODOS
