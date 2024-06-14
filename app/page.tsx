@@ -12,8 +12,8 @@ import {GET_TODOS} from "@/GraphQL/queries/queries";
 import { gql, useQuery } from "@apollo/client";
 import { Client } from "@/lib/client";
 import { cookies } from "next/headers";
-
-
+import { SessionProvider } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import {
   useAuthenticated,
   useSignInEmailPassword,
@@ -25,6 +25,8 @@ import TodoModal from "@/components/todo/TodoModal";
 
 
 function App() {
+  const session = useSession()
+  console.log('session:',session);
   return (
     <NhostProvider nhost={nhost}>
       <Home />
@@ -34,10 +36,12 @@ function App() {
 
 
 
+
 export default function Home() {
 
   const [Tasks, setTasks] = useState<any>();
   const [isOpen, setIsOpen] = useState(false);
+
 
   const handleOpenModal = () => {
     setIsOpen(true);

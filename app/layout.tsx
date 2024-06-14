@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import Navbar from "@/components/navbar/navbar";
 import {Client} from '@/lib/client'
+
 // import { ApolloWrapper } from "@/lib/apollo-wrapper";
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
