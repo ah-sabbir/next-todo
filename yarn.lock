@@ -34,7 +34,7 @@
     tslib "^2.3.0"
     zen-observable-ts "^1.2.5"
 
-"@apollo/experimental-nextjs-app-support@^0.11.1":
+"@apollo/experimental-nextjs-app-support@^0.11.2":
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/@apollo/experimental-nextjs-app-support/-/experimental-nextjs-app-support-0.11.2.tgz#3df9253229afd6ec94bc5873f649f23c487c9dfb"
   integrity sha512-HRQ8/Ux/tM2pezrhZeoHsJs55+nJvJZRV1B21QwEVtWhslQXjT5gqs5nKw86KURF0xR7gX18Nyy659NzJ09Pmw==
@@ -2904,6 +2904,7 @@ string-length@^6.0.0:
     strip-ansi "^7.1.0"
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==

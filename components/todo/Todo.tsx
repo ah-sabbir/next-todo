@@ -2,8 +2,9 @@
 
 import { gql, useMutation } from '@apollo/client';
 import Link from 'next/link'
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import {DELETE_TODOS} from "@/GraphQL/queries/queries";
+import { Client } from '@/lib/client';
 
 const DateFormated = (dateString:string)=>{
   const date = new Date(dateString);
@@ -30,34 +31,30 @@ mutation DeleteTask($todo_id: uuid!, $user_id: uuid!) {
 
 const Todo = ({data}:any) => {
   const [isHovering, setIsHovering] = useState(false);
+  const [todoId, setTodoId] = useState<any>();
+  const userId = data.userId;
 
   const handleMouseHover = () => {
     setIsHovering(!isHovering);
 }
 
-const [DeleteTask, { loading, error }] = useMutation(query, {
-  context: {
-    headers: {
-      'x-hasura-admin-secret': `PqqUqNUH7gsH5aKf746EvtKTZzB7jKwXckzLy0L7cDGuE44AXSlxN1qZ8h3pfpfI`,
-    },
-  },
-});
 
 const TodoDeleteHandler = (todo_id:string)=>{
-  DeleteTask({ variables: {  todo_id: todo_id, user_id: "bd2b1838-9145-498f-9bec-42e8e77810b6" } } ) //
-  .then((response) => {
-    console.log(response.data);
-    alert(`${todo_id} has been deleted!`)
-    // Handle successful mutation
-  })
-  .catch((error) => {
-    console.error(error.message);
-    // Handle error
-  });
+  // DeleteTask({ variables: {  todo_id: todo_id, user_id: "bd2b1838-9145-498f-9bec-42e8e77810b6" } } ) //
+  // .then((response) => {
+  //   console.log(response.data);
+  //   alert(`${todo_id} has been deleted!`)
+  // })
+  // .catch((error) => {
+  //   console.error(error.message);
+  // });
 }
 
+useEffect(()=>{
+  Client.query({ query: DELETE_TODOS(userId, todoId) }).then((res)=>console.log(res))
+  
+},[])
 
-// console.log(data)
 
   return (
     <div 

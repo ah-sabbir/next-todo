@@ -1,4 +1,5 @@
 import { useQuery, gql, useMutation } from "@apollo/client";
+import { UUID } from "crypto";
 
 
 // class Todos{
@@ -35,12 +36,24 @@ mutation {
   }`
 
 
+  export const DELETE_TODOS = (user_id:UUID, todo_id:UUID)=>{
+    return gql`
+    mutation DeleteTask($todo_id: uuid!, $user_id: uuid!) {
+      delete_todos(where: {_and: {user_id: {_eq: ${user_id}}, todo_id: {_eq: $todo_id}}}) {
+        affected_rows
+        returning {
+          status
+        }
+      }
+    }`;}
 
 
 
-export default {
-    GET_TODOS
-}
+// export default {
+//     GET_TODOS,
+//     INSERT_TODOS,
+//     DELETE_TODOS
+// }
 
 
 

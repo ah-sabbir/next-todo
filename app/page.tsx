@@ -2,18 +2,16 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-//import { ApolloClient, useQuery, gql, useMutation, InMemoryCache } from "@apollo/client";
 import Todo from "@/components/todo/Todo";
-// import GET_TODOS from "@/GraphQL/queries/queries";
 import { useAuthQuery } from "@nhost/react-apollo";
 import { nhost } from "@/lib/nhost";
 import { NhostProvider } from "@nhost/nextjs";
 import {GET_TODOS} from "@/GraphQL/queries/queries";
-import { gql, useQuery } from "@apollo/client";
 import { Client } from "@/lib/client";
 import { cookies } from "next/headers";
 import { SessionProvider } from "next-auth/react"
 import { useSession } from "next-auth/react"
+
 import {
   useAuthenticated,
   useSignInEmailPassword,
@@ -22,20 +20,16 @@ import {
 
 import { graphqlClient } from "@/lib/gqlClient";
 import TodoModal from "@/components/todo/TodoModal";
+import { getClient } from "@/lib/ApolloClient";
 
 
-function App() {
-  const session = useSession()
-  console.log('session:',session);
-  return (
-    <NhostProvider nhost={nhost}>
-      <Home />
-    </NhostProvider>
-  );
-}
-
-
-
+// function App() {
+//   return (
+//     <SessionProvider>
+//     <Home />
+//     </SessionProvider>
+//   );
+// }
 
 export default function Home() {
 
@@ -51,23 +45,13 @@ export default function Home() {
     setIsOpen(false);
   };
 
-  const { data, loading } = useQuery(GET_TODOS("bd2b1838-9145-498f-9bec-42e8e77810b6"), {
-    context: {
-      headers: {
-        'x-hasura-admin-secret': `PqqUqNUH7gsH5aKf746EvtKTZzB7jKwXckzLy0L7cDGuE44AXSlxN1qZ8h3pfpfI`,
-      },
-    },
-  });
+  // const session = useSession();
 
-  if (loading) {
-    return <div>loading.....</div>;
-  }
-
-  // useEffect(()=>{
-  //     if(!data.todos) return; 
-  //     setTasks(data.todos)
-  // },[])
-
+  // console.log(session);
+  
+  useEffect(()=>{
+    Client.query({ query: GET_TODOS("bd2b1838-9145-498f-9bec-42e8e77810b6") }).then((res)=>console.log(setTasks(res.data.todos)))
+  },[])
 
 
   return (
@@ -86,7 +70,7 @@ export default function Home() {
       </div>
         <div className="w-full flex flex-wrap">
           {
-            data.todos && data.todos.map((todo:any, i:any)=>(
+            Tasks && Tasks.map((todo:any, i:any)=>(
               <Todo key={i} data = {todo} title="this is title" description="lorem ipsum lorem ipsum"/>
             ))|| (
               <h2>No Todo</h2>
