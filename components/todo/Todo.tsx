@@ -51,7 +51,11 @@ const TodoDeleteHandler = (todo_id:string)=>{
 }
 
 useEffect(()=>{
-  Client.query({ query: DELETE_TODOS(userId, todoId) }).then((res)=>console.log(res))
+  try {
+    Client.query({ query: DELETE_TODOS(userId, todoId) }).then((res)=>console.log(res));
+  } catch (error) {
+    console.log(error)
+  }
   
 },[])
 

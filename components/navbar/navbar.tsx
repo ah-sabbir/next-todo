@@ -1,7 +1,12 @@
 import Searchbar from "@/components/searchbar/searchbar";
 import Image from "next/image";
+import { auth } from "@/auth"
+const Navbar = async()=>{
 
-const Navbar = ()=>{
+    const session:any = await auth()
+
+    if (!session.user) return null
+
     return (
         <div className="w-full mx-auto py-5 bg-zinc-200 flex flex-row items-center px-20 gap-5">
             <Searchbar/>

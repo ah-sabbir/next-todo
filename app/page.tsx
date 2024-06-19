@@ -9,8 +9,7 @@ import { NhostProvider } from "@nhost/nextjs";
 import {GET_TODOS} from "@/GraphQL/queries/queries";
 import { Client } from "@/lib/client";
 import { cookies } from "next/headers";
-import { SessionProvider } from "next-auth/react"
-import { useSession } from "next-auth/react"
+import { useSession, signIn, signOut } from "next-auth/react"
 
 import {
   useAuthenticated,
@@ -35,7 +34,7 @@ export default function Home() {
 
   const [Tasks, setTasks] = useState<any>();
   const [isOpen, setIsOpen] = useState(false);
-
+  const { data: session } = useSession()
 
   const handleOpenModal = () => {
     setIsOpen(true);
@@ -44,6 +43,10 @@ export default function Home() {
   const handleCloseModal = () => {
     setIsOpen(false);
   };
+
+  if(session){
+    console.log(session);
+  }
 
   // const session = useSession();
 
