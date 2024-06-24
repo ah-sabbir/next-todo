@@ -3,8 +3,9 @@
 import { gql, useMutation } from '@apollo/client';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import {DELETE_TODOS} from "@/GraphQL/queries/queries";
-import { Client } from '@/lib/client';
+// import {DELETE_TODOS} from "@/GraphQL/queries/queries";
+// import { Client } from '@/lib/client';
+// import { getClient } from '@/lib/ApolloClient';
 
 const DateFormated = (dateString:string)=>{
   const date = new Date(dateString);
@@ -29,6 +30,7 @@ mutation DeleteTask($todo_id: uuid!, $user_id: uuid!) {
 }`
 
 
+
 const Todo = ({data}:any) => {
   const [isHovering, setIsHovering] = useState(false);
   const [todoId, setTodoId] = useState<any>();
@@ -51,12 +53,9 @@ const TodoDeleteHandler = (todo_id:string)=>{
 }
 
 useEffect(()=>{
-  try {
-    Client.query({ query: DELETE_TODOS(userId, todoId) }).then((res)=>console.log(res));
-  } catch (error) {
-    console.log(error)
-  }
-  
+  const [updateTask] = useMutation(query, {
+    variables: {todo_id:todoId, user_id:userId}
+  })
 },[])
 
 

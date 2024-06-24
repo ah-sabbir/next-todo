@@ -34,9 +34,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} w-full h-auto transition ease-in-out delay-150 duration-500`} suppressHydrationWarning={true}>
-            <Navbar/>
-            <ApolloWrapper><NextAuthProvider>{children}</NextAuthProvider></ApolloWrapper>
-            {children}
+            <NextAuthProvider><Navbar/></NextAuthProvider>
+            <ApolloWrapper>{children}</ApolloWrapper>
       </body>
     </html>
   );
