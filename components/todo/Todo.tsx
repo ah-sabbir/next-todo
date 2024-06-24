@@ -52,11 +52,13 @@ const TodoDeleteHandler = (todo_id:string)=>{
   // });
 }
 
-useEffect(()=>{
-  const [updateTask] = useMutation(query, {
+  const [DeleteTask] = useMutation(query, {
     variables: {todo_id:todoId, user_id:userId}
   })
-},[])
+
+useEffect(()=>{
+console.log("Task deleted!");
+},[DeleteTask])
 
 
   return (
